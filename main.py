@@ -4,10 +4,69 @@ import tools
 images = [
     "data/naranja1.tif",
     "data/naranja2.tif",
-    "data/naranja3.tif"
+    "data/naranja3.tif",
+    "data/jocote1.tif",
+    "data/jocote2.tif",
+    "data/jocote3.tif"
 ]
 target_action = "q"
 current_image = None
+
+def menu_rgb_pixel():
+    print("====| Obtener RGB de píxel |\n"
+          "Introdúzca del píxel deseado...")
+    xy = input("X,Y: ")
+    xy_split = xy.split(",")
+
+    (R, G, B) = tools.get_pixel_rgb(current_image, int(xy_split[0]), int(xy_split[1]))
+
+    print("El píxel ({}) tiene la siguiente información:".format(xy),
+          "R={}, G={}, B={}".format(R, G, B))
+
+
+def menu_extract_image_region():
+    print("====| Extraer región de imagen |\n")
+    p1 = input("Punto de partida (x,y): ")
+    p2 = input("Punto final (x,y): ")
+    p1s = p1.split(",")
+    p2s = p2.split(",")
+
+    result = tools.get_image_region(current_image,
+                                    (int(p1s[1]), int(p2s[1])),
+                                    (int(p1s[0]), int(p2s[0])))
+    show_image(current_image)
+    show_image(result)
+
+
+def menu_resize_image():
+    print("====| Redimensionar imagen |\n"
+          "Introdúzca una nueva resolución...")
+    new_dimens = input("X,Y: ")
+    (x, y) = parse_pair(new_dimens)
+    resized = tools.resize(current_image, x, y)
+    show_image(resized)
+
+
+def menu_resize_with_aspect_ratio():
+    print("====| Redimensionar imagen (mantener proporción) |\n")
+    x = input("Introdúzca el ancho de la imagen: ")
+    resized = tools.resize_with_aspect_ratio(current_image, int(x))
+    show_image(resized)
+
+
+def menu_rotate_picture():
+    print("====| Rotación de imagen |")
+    degrees = input("Grados de rotación: ")
+    rotated = tools.rotate(current_image, int(degrees))
+    show_image(rotated)
+
+
+def menu_gaussian_blur():
+    print("====| Aplicar desenfoque gaussiano |")
+    kernel = input("Tamaño de kernel: ")
+    blurred = tools.gaussian_blur(current_image, int(kernel))
+    show_image(blurred)
+
 
 
 def parse_pair(str):
@@ -53,7 +112,18 @@ def menu_select_picture():
 
 
 def run_action():
-    pass
+    if target_action == "1":
+        menu_rgb_pixel()
+    if target_action == "2":
+        menu_extract_image_region()
+    if target_action == "3":
+        menu_resize_image()
+    if target_action == "4":
+        menu_resize_with_aspect_ratio()
+    if target_action == "5":
+        menu_rotate_picture()
+    if target_action == "6":
+        menu_gaussian_blur()
 
 
 def main():
