@@ -2,4 +2,4 @@
 
 ## Infografía
 
-![Infografía](infografía.png)
+<img src="infografía.png" alt="Infografía" height="800"/>
