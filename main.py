@@ -12,65 +12,9 @@ images = [
 target_action = "q"
 current_image = None
 
-def menu_rgb_pixel():
-    print("====| Obtener RGB de píxel |\n"
-          "Introdúzca del píxel deseado...")
-    xy = input("X,Y: ")
-    xy_split = xy.split(",")
 
-    (R, G, B) = tools.get_pixel_rgb(current_image, int(xy_split[0]), int(xy_split[1]))
-
-    print("El píxel ({}) tiene la siguiente información:".format(xy),
-          "R={}, G={}, B={}".format(R, G, B))
-
-
-def menu_extract_image_region():
-    print("====| Extraer región de imagen |\n")
-    p1 = input("Punto de partida (x,y): ")
-    p2 = input("Punto final (x,y): ")
-    p1s = p1.split(",")
-    p2s = p2.split(",")
-
-    result = tools.get_image_region(current_image,
-                                    (int(p1s[1]), int(p2s[1])),
-                                    (int(p1s[0]), int(p2s[0])))
-    show_image(current_image)
-    show_image(result)
-
-
-def menu_resize_image():
-    print("====| Redimensionar imagen |\n"
-          "Introdúzca una nueva resolución...")
-    new_dimens = input("X,Y: ")
-    (x, y) = parse_pair(new_dimens)
-    resized = tools.resize(current_image, x, y)
-    show_image(resized)
-
-
-def menu_resize_with_aspect_ratio():
-    print("====| Redimensionar imagen (mantener proporción) |\n")
-    x = input("Introdúzca el ancho de la imagen: ")
-    resized = tools.resize_with_aspect_ratio(current_image, int(x))
-    show_image(resized)
-
-
-def menu_rotate_picture():
-    print("====| Rotación de imagen |")
-    degrees = input("Grados de rotación: ")
-    rotated = tools.rotate(current_image, int(degrees))
-    show_image(rotated)
-
-
-def menu_gaussian_blur():
-    print("====| Aplicar desenfoque gaussiano |")
-    kernel = input("Tamaño de kernel: ")
-    blurred = tools.gaussian_blur(current_image, int(kernel))
-    show_image(blurred)
-
-
-
-def parse_pair(str):
-    s = str.split(",")
+def parse_pair(string):
+    s = string.split(",")
     return int(s[0]), int(s[1])
 
 
@@ -86,6 +30,74 @@ def show_image(image):
     cv.waitKey(0)
 
 
+def menu_rgb_pixel():
+    print("====| Obtener RGB de píxel |\n"
+          "Introdúzca del píxel deseado...")
+    xy = input("X,Y: ")
+    xy_split = parse_pair(xy)
+
+    (R, G, B) = tools.get_pixel_rgb(current_image, xy_split[0], xy_split[1])
+
+    print("El píxel ({}) tiene la siguiente información:".format(xy),
+          "R={}, G={}, B={}".format(R, G, B))
+
+    menu_home()
+
+
+def menu_extract_image_region():
+    print("====| Extraer región de imagen |\n")
+    p1 = input("Punto de partida (x,y): ")
+    p2 = input("Punto final (x,y): ")
+    p1s = parse_pair(p1)
+    p2s = parse_pair(p2)
+
+    result = tools.get_image_region(current_image,
+                                    (p1s[1], p2s[1]),
+                                    (p1s[0], p2s[0]))
+    show_image(current_image)
+    show_image(result)
+
+    menu_home()
+
+
+def menu_resize_image():
+    print("====| Redimensionar imagen |\n"
+          "Introdúzca una nueva resolución...")
+    new_dimens = input("X,Y: ")
+    (x, y) = parse_pair(new_dimens)
+    resized = tools.resize(current_image, x, y)
+    show_image(resized)
+
+    menu_home()
+
+
+def menu_resize_with_aspect_ratio():
+    print("====| Redimensionar imagen (mantener proporción) |\n")
+    x = input("Introdúzca el ancho de la imagen: ")
+    resized = tools.resize_with_aspect_ratio(current_image, int(x))
+    show_image(resized)
+
+    menu_home()
+
+
+def menu_rotate_picture():
+    print("====| Rotación de imagen |")
+    degrees = input("Grados de rotación: ")
+    rotated = tools.rotate(current_image, int(degrees))
+    show_image(rotated)
+
+    menu_home()
+
+
+def menu_gaussian_blur():
+    print("====| Aplicar desenfoque gaussiano |")
+    kernel = input("Tamaño de kernel: ")
+    blurred = tools.gaussian_blur(current_image, int(kernel))
+    show_image(blurred)
+
+    menu_home()
+
+
 def menu_home():
     print("Laboratorio de ruido en imágenes con OpenCV\nSeleccione una opción:\n"
           "1) Obtener RGB de píxel\n2) Extraer región de imagen\n"
@@ -94,7 +106,7 @@ def menu_home():
     global target_action
     target_action = input("> ")
 
-    if target_action == "x":
+    if target_action == "q":
         pass
     elif target_action.isdigit() and 1 <= int(target_action) <= 6:
         menu_select_picture()
@@ -126,8 +138,4 @@ def run_action():
         menu_gaussian_blur()
 
 
-def main():
-    menu_home()
-
-
-main()
+menu_home()
